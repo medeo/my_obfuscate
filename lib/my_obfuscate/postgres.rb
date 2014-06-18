@@ -10,11 +10,13 @@ class MyObfuscate
     # We wrap it in an array to keep it consistent with MySql bulk
     # obfuscation (multiple rows per insert statement)
     def rows_to_be_inserted(line)
-      line.gsub!(/\n$/,"")
       row = line.split(/\t/)
+      row.last && row.last.strip!
 
       row.collect! do |value|
         if value == "\\N"
+          nil
+        elsif value.empty?
           nil
         else
           value
