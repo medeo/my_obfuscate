@@ -17,12 +17,22 @@ describe MyObfuscate::Postgres do
 
     it "doesn't ignore newlines due to empty strings" do
       line = "1	2	3	\n"
-      helper.rows_to_be_inserted(line).should == [["1","2","3",nil]]
+      helper.rows_to_be_inserted(line).should == [["1","2","3",""]]
     end
 
     it "doesn't ignore newline characters in the string" do
       line = "1	2	3\n4	5"
       helper.rows_to_be_inserted(line).should == [["1","2","3\n4","5"]]
+    end
+
+    it "preserves empty strings in the middle of the string" do
+      line = "1	2		4"
+      helper.rows_to_be_inserted(line).should == [["1","2","","4"]]
+    end
+
+    it "preserves newline characters in the middle of the string" do
+      line = "1	2	\n	4"
+      helper.rows_to_be_inserted(line).should == [["1","2","\n","4"]]
     end
 
     it "replaces \\N with nil" do

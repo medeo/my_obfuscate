@@ -16,8 +16,6 @@ class MyObfuscate
       row.collect! do |value|
         if value == "\\N"
           nil
-        elsif value.empty?
-          nil
         else
           value
         end
